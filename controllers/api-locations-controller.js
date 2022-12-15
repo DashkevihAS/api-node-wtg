@@ -20,7 +20,10 @@ const getLocation = (req, res) => {
 const getSearchLocation = (req, res) => {
   const search = req.params.search.toLowerCase();
   Location.find({
-    $or: [{ title: { $regex: search } }, { description: { $regex: search } }],
+    $or: [
+      { title: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } },
+    ],
   })
     .then((event) => res.status(200).json(event))
     .catch((err) => handleError(res, err));

@@ -9,14 +9,13 @@ require('dotenv').config();
 
 const eventApiRoutes = require('./routes/api-event-routes');
 const locationApiRoutes = require('./routes/api-location-routes');
+const userApiRoutes = require('./routes/api-user-routes');
 
 // разукрашивают сообщения в консоли
 const errorMsg = chalk.bgKeyword('white').redBright;
 const successMsg = chalk.bgKeyword('green').white;
 
 const app = express();
-
-app.set('view engine', 'ejs');
 
 // process.env. скрывает приватные данные для публичных репо
 mongoose
@@ -33,6 +32,8 @@ app.listen(process.env.PORT, (error) => {
     : console.log(successMsg(`Listening port ${process.env.PORT}`));
 });
 
+app.use(express.json());
+
 // middleware  который выводит данные сразу после получения запроса
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms'),
@@ -43,13 +44,9 @@ app.use(cors());
 // миддлвар для парсинга строки запроса
 app.use(express.urlencoded({ extended: false }));
 
-// чтобы был доступ к стилям на сервере и подлючению их в html(ejs)
-app.use(express.static('styles'));
-
-app.use(methodOverride('_method'));
-
 app.use(eventApiRoutes);
 app.use(locationApiRoutes);
+app.use(userApiRoutes);
 
 app.use((req, res) => {
   res.status(404).send({ error: `page ${req.url} not found` });
