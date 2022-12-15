@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const mongoose = require('mongoose');
-const methodOverride = require('method-override');
 const chalk = require('chalk');
 require('dotenv').config();
 
@@ -42,7 +41,7 @@ app.use(
 app.use(cors());
 
 // миддлвар для парсинга строки запроса
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
 
 app.use(eventApiRoutes);
 app.use(locationApiRoutes);
